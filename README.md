@@ -172,7 +172,8 @@ queryFASTA(
    str_id OR arr_idList,
    str_fileIdentifier,
    fn_callback [ context NCBIConnect, params [ Error, NCBIConnectFASTA ] ]
-)```
+)
+```
 
 ```id``` is a specific gene identifier (Gi) or an array of them, and
 ```fileIdentifer``` should be a unique string that can be used to identify the
@@ -347,7 +348,7 @@ NCBIConnectResult
 
 **Inherits**
 
-```NCBIConnectSet```
+This Object inherits from ```NCBIConnectSet```
 
 
 **Constructor**
@@ -360,7 +361,7 @@ NCBIConnectCollection
 
 **Inherits**
 
-```NCBIConnectSet```
+This Object inherits from ```NCBIConnectSet```
 
 
 **Constructor**
