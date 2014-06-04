@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="NCBIConnect : JavaScript library for interfacing with National Center for Biotechnology Information&#39;s databases" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>NCBIConnect</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/keithwhor/NCBIConnect">View on GitHub</a>
+
+          <h1 id="project_title">NCBIConnect</h1>
+          <h2 id="project_tagline">JavaScript library for interfacing with National Center for Biotechnology Information&#39;s databases</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/keithwhor/NCBIConnect/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/keithwhor/NCBIConnect/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="ncbiconnectjs" class="anchor" href="#ncbiconnectjs"><span class="octicon octicon-link"></span></a>NCBIConnect.js</h1>
+
+<h2>
+<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>NCBIConnect.js is a client-side JavaScript library that provides a simple,
+hassle-free interface to some of the National Center for Biotechnology
+Information's databases.</p>
+
+<p>Right now, the <em>nucleotide</em> (nuccore) and <em>protein</em> databases are supported
+(you can search for nucleic acid or protein sequences by name). Support
+for gene data should arrive in the next build.</p>
+
+<h2>
+<a name="primary-objective" class="anchor" href="#primary-objective"><span class="octicon octicon-link"></span></a>Primary Objective</h2>
+
+<p>The primary objective of this project is to encourage talented
+bioinformaticians and web developers to find more common ground and begin taking
+more projects to the beautiful, dynamic, modern web with JavaScript.</p>
+
+<p>NCBIConnect can be used as a starting point to develop webapps that rely on
+NCBI's databases without having to set up a server environment - all
+processing is done client-side.</p>
+
+<p>NCBIConnect can also be used to write simple data collection scripts (in much
+fewer lines) that can be shared easily as .html files. No Perl required!</p>
+
+<p>(You can also consider writing your own data processing applications and
+scripts without having to save or load from local data!)</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Simply download <code>ncbiconnect.js</code> and incorporate it into your webpage using:</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"ncbiconnect.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+
+<p>Voila! (Make sure it's in the same directory, otherwise specify the relative
+path.)</p>
+
+<h2>
+<a name="example-usage" class="anchor" href="#example-usage"><span class="octicon octicon-link"></span></a>Example Usage</h2>
+
+<p>Let's say I'm interested in the genome of a specific virus. In this case, it's
+the much-studied bacteriophage T4.</p>
+
+<p>I want to grab the top 5 hits from NCBI's nucleotide database for T4's genome,
+and store it in a single FASTA file.</p>
+
+<p>Easy!</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">nucDB</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">NCBIConnect</span><span class="p">(</span><span class="s1">'nucleotide'</span><span class="p">);</span>
+
+<span class="nx">nucDB</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span>
+   <span class="s1">'Bacteriophage T4'</span><span class="p">,</span> <span class="c1">// My search term</span>
+   <span class="p">{</span><span class="s1">'limit'</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">'offset'</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span> <span class="c1">// Give 5 results, starting at 0</span>
+   <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span> <span class="p">}</span>
+
+      <span class="nx">result</span><span class="p">.</span><span class="nx">getFASTA</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fasta</span><span class="p">)</span> <span class="p">{</span>
+         <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span> <span class="p">}</span>
+
+         <span class="nx">fasta</span><span class="p">.</span><span class="nx">save</span><span class="p">();</span>
+
+      <span class="p">});</span>
+
+   <span class="p">}</span>
+<span class="p">);</span>
+</pre></div>
+
+<p>Assuming we don't hit any errors with NCBI's servers, a file should
+automatically be downloaded to our computer's <code>Downloads</code> folder when we run
+this script.</p>
+
+<p><strong>What about listing results?</strong></p>
+
+<p>Simple!</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">nucDB</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span>
+   <span class="s1">'Bacteriophage T4'</span><span class="p">,</span> <span class="c1">// My search term</span>
+   <span class="p">{</span><span class="s1">'limit'</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">'offset'</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span> <span class="c1">// Give 5 results, starting at 0</span>
+   <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span> <span class="p">}</span>
+      <span class="nx">result</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">row</span><span class="p">)</span> <span class="p">{</span>
+         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">row</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'id'</span><span class="p">)</span> <span class="o">+</span> <span class="s1">', '</span> <span class="o">+</span> <span class="nx">row</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'name'</span><span class="p">));</span>
+      <span class="p">});</span>
+   <span class="p">}</span>
+<span class="p">);</span>
+</pre></div>
+
+<p>We now see a lovely output in our console:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="mi">29366675</span><span class="p">,</span> <span class="nx">Enterobacteria</span> <span class="nx">phage</span> <span class="nx">T4</span><span class="p">,</span> <span class="nx">complete</span> <span class="nx">genome</span>
+<span class="mi">422934005</span><span class="p">,</span> <span class="nx">Enterobacteria</span> <span class="nx">phage</span> <span class="nx">Bp7</span><span class="p">,</span> <span class="nx">complete</span> <span class="nx">genome</span>
+<span class="mi">161622381</span><span class="p">,</span> <span class="nx">Enterobacteria</span> <span class="nx">phage</span> <span class="nx">JS98</span><span class="p">,</span> <span class="nx">complete</span> <span class="nx">genome</span>
+<span class="mi">291290213</span><span class="p">,</span> <span class="nx">Enterobacteria</span> <span class="nx">phage</span> <span class="nx">AR1</span> <span class="nx">DNA</span><span class="p">,</span> <span class="nx">complete</span> <span class="nx">genome</span>
+<span class="mi">345450514</span><span class="p">,</span> <span class="nx">Enterobacteria</span> <span class="nx">phage</span> <span class="nx">Bp7</span><span class="p">,</span> <span class="nx">complete</span> <span class="nx">genome</span>
+</pre></div>
+
+<p><strong>New to HTML?</strong></p>
+
+<p>You may have written some Perl but you're unfamiliar with
+throwing together a webpage. No problem! Included with this package is
+<code>index.html</code>, a sample index page containing the latter example above.</p>
+
+<p>It will execute on page load so make sure you have your web console open to see
+it work!</p>
+
+<p>There are also a number of useful methods to be used with results (and FASTA
+files). Explore them in the documentation!</p>
+
+<p><strong>Happy building!</strong></p>
+
+<h1>
+<a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h1>
+
+<p>NCBIConnect.js contains the following objects:</p>
+
+<p><code>NCBIConnect</code> is the main connection object, it manages queries to NCBI's
+servers</p>
+
+<p><code>NCBIConnectRow</code> is a result row (from a query to NCBI's databases)</p>
+
+<p><code>NCBIConnectSet</code> is a set of <code>NCBIConnectRow</code>s</p>
+
+<p><code>NCBIConnectResult</code> inherits from <code>NCBIConnectSet</code> and is the result
+object that contains one or many results of a specific query from <code>NCBIConnect</code></p>
+
+<p><code>NCBIConnectCollection</code> inherits from <code>NCBIConnectSet</code> and can contain
+any collection of results from a number of queries</p>
+
+<p><code>NCBIConnectFASTA</code> is a special interface that provides some nifty tools for
+dealing with FASTA files</p>
+
+<h2>
+<a name="ncbiconnect" class="anchor" href="#ncbiconnect"><span class="octicon octicon-link"></span></a>NCBIConnect</h2>
+
+<h3>
+<a name="constructor" class="anchor" href="#constructor"><span class="octicon octicon-link"></span></a>Constructor</h3>
+
+<p>Instantiate using <code>var myConn = new NCBIConnect('[database]')</code> where
+<em>[database]</em> is one of: <em>nucleotide</em>, <em>protein</em>.</p>
+
+<h3>
+<a name="methods" class="anchor" href="#methods"><span class="octicon octicon-link"></span></a>Methods</h3>
+
+<p><strong>query</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">query</span><span class="p">(</span>
+   <span class="nx">str_searchTerm</span><span class="p">,</span>
+   <span class="nx">obj_filters</span><span class="p">,</span>
+   <span class="nx">fn_callback</span> <span class="p">[</span> <span class="nx">context</span> <span class="nx">NCBIConnect</span><span class="p">,</span> <span class="nx">params</span> <span class="p">[</span> <span class="nb">Error</span><span class="p">,</span> <span class="nx">NCBIConnectResult</span> <span class="p">]</span> <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Supported filters are <code>limit</code> to provide a max number of records to return,
+and <code>offset</code> to indicate which record to begin at.</p>
+
+<p><strong>queryFASTA</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">queryFASTA</span><span class="p">(</span>
+   <span class="nx">str_id</span> <span class="nx">OR</span> <span class="nx">arr_idList</span><span class="p">,</span>
+   <span class="nx">str_fileIdentifier</span><span class="p">,</span>
+   <span class="nx">fn_callback</span> <span class="p">[</span> <span class="nx">context</span> <span class="nx">NCBIConnect</span><span class="p">,</span> <span class="nx">params</span> <span class="p">[</span> <span class="nb">Error</span><span class="p">,</span> <span class="nx">NCBIConnectFASTA</span> <span class="p">]</span> <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+
+<p><code>id</code> is a specific gene identifier (Gi) or an array of them, and
+<code>fileIdentifer</code> should be a unique string that can be used to identify the
+file.</p>
+
+<p><strong>createCollection</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">createCollection</span><span class="p">()</span>
+</pre></div>
+
+<p>Creates an empty <code>NCBIConnectCollection</code> which can then be used to store
+result sets for future use.</p>
+
+<h2>
+<a name="ncbiconnectrow" class="anchor" href="#ncbiconnectrow"><span class="octicon octicon-link"></span></a>NCBIConnectRow</h2>
+
+<h3>
+<a name="constructor-1" class="anchor" href="#constructor-1"><span class="octicon octicon-link"></span></a>Constructor</h3>
+
+<p>Inaccessible, created only as a result of a query from <code>NCBIConnect</code></p>
+
+<h3>
+<a name="methods-1" class="anchor" href="#methods-1"><span class="octicon octicon-link"></span></a>Methods</h3>
+
+<p><strong>set</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">set</span><span class="p">(</span>
+   <span class="nx">str_field</span><span class="p">,</span>
+   <span class="nx">var_value</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Sets a given field of the row to a specific value.</p>
+
+<p><strong>get</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">get</span><span class="p">(</span>
+   <span class="nx">str_field</span><span class="p">,</span>
+   <span class="nx">var_defaultValue</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Gets the value of the row associated with a specific field. If no value is
+present, defaultValue is returned.</p>
+
+<p><strong>getFASTA</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">getFASTA</span><span class="p">(</span>
+   <span class="nx">fn_callback</span> <span class="p">[</span> <span class="nx">context</span> <span class="nx">NCBIConnect</span><span class="p">,</span> <span class="nx">params</span> <span class="p">[</span> <span class="nb">Error</span><span class="p">,</span> <span class="nx">NCBIConnectFASTA</span> <span class="p">]</span> <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Alias for <code>NCBIConnect.queryFASTA</code> for this specific result row.</p>
+
+<h2>
+<a name="ncbiconnectset" class="anchor" href="#ncbiconnectset"><span class="octicon octicon-link"></span></a>NCBIConnectSet</h2>
+
+<h3>
+<a name="constructor-2" class="anchor" href="#constructor-2"><span class="octicon octicon-link"></span></a>Constructor</h3>
+
+<p>Inaccessible, created only as a result of selecting values from
+<code>NCBIConnectResult</code> or <code>NCBIConnectCollection</code></p>
+
+<h3>
+<a name="methods-2" class="anchor" href="#methods-2"><span class="octicon octicon-link"></span></a>Methods</h3>
+
+<p><strong>each</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">each</span><span class="p">(</span>
+   <span class="nx">fn_callback</span> <span class="p">[</span> <span class="nx">context</span> <span class="nx">NCBIConnect</span><span class="p">,</span> <span class="nx">params</span> <span class="p">[</span> <span class="nx">NCBIConnectRow</span> <span class="p">]</span> <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Executes a provided callback function for each row in the set, starting with
+the first result.</p>
+
+<p><strong>count</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">count</span><span class="p">()</span>
+</pre></div>
+
+<p>Returns the number of items in the set.</p>
+
+<p><strong>item</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">item</span><span class="p">(</span>
+   <span class="nx">int_index</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Returns the item at <code>index</code> from the set (<code>NCBIConnectRow</code>).</p>
+
+<p><strong>first</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">first</span><span class="p">()</span>
+</pre></div>
+
+<p>Returns the first item of the set. Throws an error if the set
+is empty.</p>
+
+<p><strong>last</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">last</span><span class="p">()</span>
+</pre></div>
+
+<p>Returns the last item of the set. Throws an error if the set is
+empty.</p>
+
+<p><strong>range</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">range</span><span class="p">(</span>
+   <span class="nx">int_start</span><span class="p">,</span>
+   <span class="nx">int_end</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Returns <code>NCBIConnectSet</code> with values beginning at index <code>start</code> and
+ending at index <code>end</code> (<strong>inclusive</strong>).</p>
+
+<p><strong>subset</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">subset</span><span class="p">(</span>
+   <span class="nx">int_start</span><span class="p">,</span>
+   <span class="nx">int_length</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Returns <code>NCBIConnectSet</code> with values beginning at index <code>start</code> that is
+<code>length</code> items long.</p>
+
+<p><strong>toArray</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">toArray</span><span class="p">()</span>
+</pre></div>
+
+<p>Converts the set into a native Array of native Objects. (These objects are <em>not</em>
+copies! They contain referential row data.)</p>
+
+<p><strong>list</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">list</span><span class="p">(</span>
+   <span class="nx">str_field</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Returns a native Array of all values associated with <code>field</code> for each
+row in the set.</p>
+
+<p><strong>getFASTA</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">getFASTA</span><span class="p">(</span>
+   <span class="nx">fn_callback</span> <span class="p">[</span> <span class="nx">context</span> <span class="nx">NCBIConnect</span><span class="p">,</span> <span class="nx">params</span> <span class="p">[</span> <span class="nb">Error</span><span class="p">,</span> <span class="nx">NCBIConnectFASTA</span> <span class="p">]</span> <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Alias for <code>NCBIConnect.queryFASTA</code> for all rows in the set - returns
+an aggregated (multi-FASTA) file.</p>
+
+<h2>
+<a name="ncbiconnectresult" class="anchor" href="#ncbiconnectresult"><span class="octicon octicon-link"></span></a>NCBIConnectResult</h2>
+
+<h3>
+<a name="inherits" class="anchor" href="#inherits"><span class="octicon octicon-link"></span></a>Inherits</h3>
+
+<p>This Object inherits from <code>NCBIConnectSet</code></p>
+
+<h3>
+<a name="constructor-3" class="anchor" href="#constructor-3"><span class="octicon octicon-link"></span></a>Constructor</h3>
+
+<p>Inaccessible, returned as a result of <code>NCBIConnect.query</code></p>
+
+<h2>
+<a name="ncbiconnectcollection" class="anchor" href="#ncbiconnectcollection"><span class="octicon octicon-link"></span></a>NCBIConnectCollection</h2>
+
+<h3>
+<a name="inherits-1" class="anchor" href="#inherits-1"><span class="octicon octicon-link"></span></a>Inherits</h3>
+
+<p>This Object inherits from <code>NCBIConnectSet</code></p>
+
+<h3>
+<a name="constructor-4" class="anchor" href="#constructor-4"><span class="octicon octicon-link"></span></a>Constructor</h3>
+
+<p>Inaccessible, returned as a result of <code>NCBIConnect.createCollection</code></p>
+
+<h3>
+<a name="methods-3" class="anchor" href="#methods-3"><span class="octicon octicon-link"></span></a>Methods</h3>
+
+<p><strong>add</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">add</span><span class="p">(</span>
+   <span class="p">[</span><span class="nx">NCBIConnectRow</span>
+      <span class="nx">or</span> <span class="nx">NCBIConnectSet</span>
+      <span class="nx">or</span> <span class="nx">NCBIConnectResult</span>
+      <span class="nx">or</span> <span class="nx">NCBIConnectCollection</span><span class="p">],</span>
+   <span class="p">...</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Accepts any number of arguments of the above specified kinds. Adds the rows from
+these objects, in order, to the collection. Returns current collection.</p>
+
+<p><strong>remove</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">remove</span><span class="p">(</span>
+   <span class="nx">int_index</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Removes the row at specified index from the current collection, and returns the
+current collection.</p>
+
+<h2>
+<a name="ncbiconnectfasta" class="anchor" href="#ncbiconnectfasta"><span class="octicon octicon-link"></span></a>NCBIConnectFASTA</h2>
+
+<h3>
+<a name="constructor-5" class="anchor" href="#constructor-5"><span class="octicon octicon-link"></span></a>Constructor</h3>
+
+<p>Inaccessible, returned as a result of <code>NCBIConnect.queryFASTA</code>'s callback.</p>
+
+<h3>
+<a name="methods-4" class="anchor" href="#methods-4"><span class="octicon octicon-link"></span></a>Methods</h3>
+
+<p><strong>size</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">size</span><span class="p">()</span>
+</pre></div>
+
+<p>Returns the total size, in bytes, of the raw FASTA (or multiFASTA) file.</p>
+
+<p><strong>raw</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">raw</span><span class="p">()</span>
+</pre></div>
+
+<p>Returns a string containing the raw FASTA (or multiFASTA) file.</p>
+
+<p><strong>data</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">data</span><span class="p">(</span>
+   <span class="nx">opt_int_index</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>If <code>index</code> is supplied, provides a native Object containing both the header
+(comments) and content data of the FASTA file at the specified index (useful
+for multiFASTA files). Otherwise provides a native Array containing all such
+Objects. (Single FASTA files will use an index of 0).</p>
+
+<p><strong>header</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">header</span><span class="p">(</span>
+   <span class="nx">opt_int_index</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Similar to <code>data()</code>, but provides the specific header (comment) information
+for FASTA file at specified index.</p>
+
+<p><strong>content</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">content</span><span class="p">(</span>
+   <span class="nx">opt_int_index</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Similar to <code>header</code>, but provides the specific content information
+for FASTA file at specified index. (No whitespace.)</p>
+
+<p><strong>save</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">save</span><span class="p">(</span>
+   <span class="nx">opt_str_name</span>
+<span class="p">)</span>
+</pre></div>
+
+<p>Automatically saves the full FASTA or multiFASTA file to the user's
+browser-specified "Downloads" folder. If <code>name</code> is provided, it will
+attempt to save the file as <code>name + '.seq'</code>, otherwise the name will be
+automatically generated.</p>
+
+<h1>
+<a name="thanks" class="anchor" href="#thanks"><span class="octicon octicon-link"></span></a>Thanks</h1>
+
+<p>Thanks for checking out NCBIConnect.js :)</p>
+
+<p>You can check out my other projects on my GitHub account:
+<a href="http://github.com/keithwhor">http://github.com/keithwhor</a></p>
+
+<p>View my personal website at:
+<a href="http://keithwhor.com">http://keithwhor.com</a></p>
+
+<p>Or follow me on Twitter:
+<a href="https://github.com/keithwhor" class="user-mention">@keithwhor</a>
+<a href="http://twitter.com/keithwhor">http://twitter.com/keithwhor</a></p>
+
+<p>Cheers!</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">NCBIConnect maintained by <a href="https://github.com/keithwhor">keithwhor</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
