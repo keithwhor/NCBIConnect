@@ -79,9 +79,10 @@ Assuming we don't hit any errors with NCBI's servers, a file should
 automatically be downloaded to our computer's ```Downloads``` folder when we run
 this script.
 
----
 
-Okay, but let's say I want to list results instead... simple!
+**What about listing results?**
+
+Simple!
 
 ```javascript
 nucDB.query(
@@ -106,10 +107,11 @@ We now see a lovely output in our console:
 345450514, Enterobacteria phage Bp7, complete genome
 ```
 
----
 
-New to HTML? You may have written some Perl but you can't throw together
-a webpage and have it work properly. Included with this package is
+**New to HTML?**
+
+You may have written some Perl but you're unfamiliar with
+throwing together a webpage. No problem! Included with this package is
 ```index.html```, a sample index page containing the latter example above.
 
 It will execute on page load so make sure you have your web console open to see
