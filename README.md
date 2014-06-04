@@ -146,13 +146,15 @@ dealing with FASTA files
 NCBIConnect
 -----------
 
-**Constructor**
+### Constructor
 
 Instantiate using ```var myConn = new NCBIConnect('[database]')``` where
 *[database]* is one of: *nucleotide*, *protein*.
 
 
-**Methods**
+### Methods
+
+**query**
 
 ```javascript
 query(
@@ -165,7 +167,7 @@ query(
 Supported filters are ```limit``` to provide a max number of records to return,
 and ```offset``` to indicate which record to begin at.
 
----
+**queryFASTA**
 
 ```javascript
 queryFASTA(
@@ -179,7 +181,7 @@ queryFASTA(
 ```fileIdentifer``` should be a unique string that can be used to identify the
 file.
 
----
+**createCollection**
 
 ```javascript
 createCollection()
@@ -192,12 +194,14 @@ result sets for future use.
 NCBIConnectRow
 --------------
 
-**Constructor**
+### Constructor
 
 Inaccessible, created only as a result of a query from ```NCBIConnect```
 
 
-**Methods**
+### Methods
+
+**set**
 
 ```javascript
 set(
@@ -208,7 +212,7 @@ set(
 
 Sets a given field of the row to a specific value.
 
----
+**get**
 
 ```javascript
 get(
@@ -220,7 +224,7 @@ get(
 Gets the value of the row associated with a specific field. If no value is
 present, defaultValue is returned.
 
----
+**getFASTA**
 
 ```javascript
 getFASTA(
@@ -234,13 +238,15 @@ Alias for ```NCBIConnect.queryFASTA``` for this specific result row.
 NCBIConnectSet
 --------------
 
-**Constructor**
+### Constructor
 
 Inaccessible, created only as a result of selecting values from
 ```NCBIConnectResult``` or ```NCBIConnectCollection```
 
 
-**Methods**
+### Methods
+
+**each**
 
 ```javascript
 each(
@@ -251,7 +257,7 @@ each(
 Executes a provided callback function for each row in the set, starting with
 the first result.
 
----
+**count**
 
 ```javascript
 count()
@@ -259,7 +265,7 @@ count()
 
 Returns the number of items in the set.
 
----
+**item**
 
 ```javascript
 item(
@@ -269,7 +275,7 @@ item(
 
 Returns the item at ```index``` from the set (```NCBIConnectRow```).
 
----
+**first**
 
 ```javascript
 first()
@@ -278,7 +284,7 @@ first()
 Returns the first item of the set. Throws an error if the set
 is empty.
 
----
+**last**
 
 ```javascript
 last()
@@ -287,7 +293,7 @@ last()
 Returns the last item of the set. Throws an error if the set is
 empty.
 
----
+**range**
 
 ```javascript
 range(
@@ -297,9 +303,9 @@ range(
 ```
 
 Returns ```NCBIConnectSet``` with values beginning at index ```start``` and
-ending at index ```end``` (inclusive).
+ending at index ```end``` (**inclusive**).
 
----
+**subset**
 
 ```javascript
 subset(
@@ -311,7 +317,7 @@ subset(
 Returns ```NCBIConnectSet``` with values beginning at index ```start``` that is
 ```length``` items long.
 
----
+**toArray**
 
 ```javascript
 toArray()
@@ -320,7 +326,7 @@ toArray()
 Converts the set into a native Array of native Objects. (These objects are *not*
 copies! They contain referential row data.)
 
----
+**list**
 
 ```javascript
 list(
@@ -331,7 +337,7 @@ list(
 Returns a native Array of all values associated with ```field``` for each
 row in the set.
 
----
+**getFASTA**
 
 ```javascript
 getFASTA(
@@ -346,12 +352,12 @@ an aggregated (multi-FASTA) file.
 NCBIConnectResult
 -----------------
 
-**Inherits**
+### Inherits
 
 This Object inherits from ```NCBIConnectSet```
 
 
-**Constructor**
+### Constructor
 
 Inaccessible, returned as a result of ```NCBIConnect.query```
 
@@ -359,17 +365,19 @@ Inaccessible, returned as a result of ```NCBIConnect.query```
 NCBIConnectCollection
 ----------------------
 
-**Inherits**
+### Inherits
 
 This Object inherits from ```NCBIConnectSet```
 
 
-**Constructor**
+### Constructor
 
 Inaccessible, returned as a result of ```NCBIConnect.createCollection```
 
 
-**Methods**
+### Methods
+
+**add**
 
 ```javascript
 add(
@@ -384,6 +392,8 @@ add(
 Accepts any number of arguments of the above specified kinds. Adds the rows from
 these objects, in order, to the collection. Returns current collection.
 
+**remove**
+
 ```javascript
 remove(
    int_index
@@ -397,12 +407,14 @@ current collection.
 NCBIConnectFASTA
 ----------------
 
-**Constructor**
+### Constructor
 
 Inaccessible, returned as a result of ```NCBIConnect.queryFASTA```'s callback.
 
 
-**Methods**
+### Methods
+
+**size**
 
 ```javascript
 size()
@@ -410,7 +422,7 @@ size()
 
 Returns the total size, in bytes, of the raw FASTA (or multiFASTA) file.
 
----
+**raw**
 
 ```javascript
 raw()
@@ -418,7 +430,7 @@ raw()
 
 Returns a string containing the raw FASTA (or multiFASTA) file.
 
----
+**data**
 
 ```javascript
 data(
@@ -431,7 +443,7 @@ If ```index``` is supplied, provides a native Object containing both the header
 for multiFASTA files). Otherwise provides a native Array containing all such
 Objects. (Single FASTA files will use an index of 0).
 
----
+**header**
 
 ```javascript
 header(
@@ -442,7 +454,7 @@ header(
 Similar to ```data()```, but provides the specific header (comment) information
 for FASTA file at specified index.
 
----
+**content**
 
 ```javascript
 content(
@@ -453,7 +465,7 @@ content(
 Similar to ```header```, but provides the specific content information
 for FASTA file at specified index. (No whitespace.)
 
----
+**save**
 
 ```javascript
 save(
