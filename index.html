@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>
+      NCBIConnect Test Page
+   </title>
+   <script src='ncbiconnect.js'></script>
+</head>
+<body>
+</body>
+</html>
+<script>
+
+function main() {
+
+   var nucDB = new NCBIConnect('nucleotide');
+
+   nucDB.query(
+      'Bacteriophage T4', // My search term
+      {'limit': 5, 'offset': 0}, // Give 5 results, starting at 0
+      function(err, result) {
+         if(err) { throw err; }
+         result.each(function(row) {
+
+            // Store a string of some data
+            var info = row.get('id') + ', ' + row.get('name');
+
+            // Put it on the body in separate div tags.
+            document.body.innerHTML += '<div>' + info + '</div>';
+
+            // Log it in the console as well.
+            console.log(info);
+
+         });
+
+         // Remove comment (//) on the following line to save first 3 results
+         // result.range(0, 2).save();
+
+      }
+   );
+
+};
+
+window.addEventListener('load', main);
+
+</script>
