@@ -118,8 +118,9 @@ It will execute on page load so make sure you have your web console open to see
 it work!
 
 There are also a number of useful methods to be used with results (and FASTA
-files). Explore them in the documentation and happy building!
+files). Explore them in the documentation!
 
+**Happy building!**
 
 
 Documentation
