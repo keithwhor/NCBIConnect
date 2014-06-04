@@ -134,8 +134,7 @@ servers
 ```NCBIConnectSet``` is a set of ```NCBIConnectRow```s
 
 ```NCBIConnectResult``` inherits from ```NCBIConnectSet``` and is the result
-object that contains one or many results of a specific query from
-```NCBIConnect```
+object that contains one or many results of a specific query from ```NCBIConnect```
 
 ```NCBIConnectCollection``` inherits from ```NCBIConnectSet``` and can contain
 any collection of results from a number of queries
@@ -147,13 +146,13 @@ dealing with FASTA files
 NCBIConnect
 -----------
 
-*Constructor*
+**Constructor**
 
 Instantiate using ```var myConn = new NCBIConnect('[database]')``` where
 *[database]* is one of: *nucleotide*, *protein*.
 
 
-*Methods*
+**Methods**
 
 ```javascript
 query(
@@ -192,12 +191,12 @@ result sets for future use.
 NCBIConnectRow
 --------------
 
-*Constructor*
+**Constructor**
 
 Inaccessible, created only as a result of a query from ```NCBIConnect```
 
 
-*Methods*
+**Methods**
 
 ```javascript
 set(
@@ -234,13 +233,13 @@ Alias for ```NCBIConnect.queryFASTA``` for this specific result row.
 NCBIConnectSet
 --------------
 
-*Constructor*
+**Constructor**
 
 Inaccessible, created only as a result of selecting values from
 ```NCBIConnectResult``` or ```NCBIConnectCollection```
 
 
-*Methods*
+**Methods**
 
 ```javascript
 each(
@@ -346,12 +345,12 @@ an aggregated (multi-FASTA) file.
 NCBIConnectResult
 -----------------
 
-*Inherits*
+**Inherits**
 
 ```NCBIConnectSet```
 
 
-*Constructor*
+**Constructor**
 
 Inaccessible, returned as a result of ```NCBIConnect.query```
 
@@ -359,17 +358,17 @@ Inaccessible, returned as a result of ```NCBIConnect.query```
 NCBIConnectCollection
 ----------------------
 
-*Inherits*
+**Inherits**
 
 ```NCBIConnectSet```
 
 
-*Constructor*
+**Constructor**
 
 Inaccessible, returned as a result of ```NCBIConnect.createCollection```
 
 
-*Methods*
+**Methods**
 
 ```javascript
 add(
@@ -397,12 +396,12 @@ current collection.
 NCBIConnectFASTA
 ----------------
 
-*Constructor*
+**Constructor**
 
 Inaccessible, returned as a result of ```NCBIConnect.queryFASTA```'s callback.
 
 
-*Methods*
+**Methods**
 
 ```javascript
 size()
